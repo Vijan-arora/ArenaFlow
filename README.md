@@ -1,22 +1,19 @@
 # ArenaFlow — Smart Stadiums & Tournament Operations
 
-GenAI platform for the **FIFA World Cup 2026** that enhances both the fan
+GenAI platform for the **Stadiums** that enhances both the fan
 experience and venue operations at Estadio Azteca. Fans get multilingual,
 grounded navigation, accessibility and transport help; organizers get live
 crowd intelligence and AI-generated operational briefings for real-time
 decisions.
 
-**Live demo:** <https://stadiumiq-851755555005.asia-south1.run.app>
-**Repository:** <https://github.com/Auenchanters/Virtual-Prompt-war-Week-4>
-**Region:** asia-south1 · **GCP project:** week-4-501612
-
+**Live demo:** <https://virtual-prompt-war-4.onrender.com/>
 ---
 
 ## Problem Statement Alignment
 
 > Build a GenAI-enabled solution that enhances stadium operations and the
 > overall tournament experience for fans, organizers, volunteers, or venue
-> staff during the FIFA World Cup 2026 — navigation, crowd management,
+
 > accessibility, transportation, sustainability, multilingual assistance,
 > operational intelligence, or real-time decision support.
 
@@ -217,9 +214,3 @@ Each service is load-bearing, accessed through its official SDK.
 | **Cloud Logging**            | Receives structured JSON logs (severity-tagged) from stdout                                    | `server/src/lib/logger.ts`                           |
 
 ---
-
-## Team
-
-Built by Utkarsh Singh Yadav for Hack2skill PromptWars Virtual — Week 4.
-
-Licensed under the [MIT License](LICENSE).
