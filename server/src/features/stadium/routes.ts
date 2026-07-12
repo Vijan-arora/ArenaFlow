@@ -5,7 +5,7 @@ import { Router } from 'express';
 import { validateQuery, VALIDATED_QUERY_KEY } from '../../middleware/validate.js';
 import { facilitiesQuerySchema, type FacilitiesQuery } from './schemas.js';
 import { getFacilities } from './service.js';
-import { VENUE } from './venue-data.js';
+import { VENUE } from '../../lib/venue/venue-data.js';
 
 /** Router mounted at /api/stadium. */
 export const stadiumRoutes: Router = Router();
@@ -16,6 +16,5 @@ stadiumRoutes.get('/facilities', validateQuery(facilitiesQuerySchema), (_req, re
 });
 
 stadiumRoutes.get('/venue', (_req, res) => {
-  const { name, city, tournament, capacity } = VENUE;
-  res.json({ venue: { name, city, tournament, capacity } });
+  res.json({ venue: VENUE });
 });

@@ -23,6 +23,13 @@ describe('TtlCache', () => {
     expect(cache.get('k')).toBeUndefined();
   });
 
+  it('expires values exactly at the TTL boundary', () => {
+    const cache = new TtlCache<string>(1000, 10);
+    cache.set('k', 'v');
+    vi.advanceTimersByTime(1000);
+    expect(cache.get('k')).toBeUndefined();
+  });
+
   it('returns undefined for a key that was never set', () => {
     const cache = new TtlCache<string>(1000, 10);
     expect(cache.get('missing')).toBeUndefined();

@@ -47,6 +47,7 @@ const SNAPSHOT: OpsSnapshot = {
 
 afterEach(() => {
   vi.restoreAllMocks();
+  localStorage.clear();
 });
 
 describe('OperationsPage', () => {

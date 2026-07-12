@@ -1,15 +1,17 @@
 // State and side effects for the fan assistant conversation. Keeps the page
 // component declarative: it renders whatever this hook exposes.
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { ApiError, askAssistant } from '../../lib/api.js';
+import { ApiError, askAssistant, fetchVenueData } from '../../lib/api.js';
 import type { SupportedLanguage } from '../../lib/api-types.js';
+import { getOfflineAssistantResponse, saveVenueData } from '../../lib/offline-store.js';
 
 /** A single turn in the assistant conversation. */
 export interface ChatTurn {
   id: string;
   role: 'fan' | 'assistant';
   text: string;
+  lang?: SupportedLanguage;
 }
 
 interface UseAssistantResult {
@@ -19,6 +21,8 @@ interface UseAssistantResult {
   error: string | null;
   setLanguage: (language: SupportedLanguage) => void;
   ask: (question: string) => Promise<void>;
+  isOffline: boolean;
+  lastKnownTime: string | null;
 }
 
 function makeId(): string {
@@ -31,6 +35,38 @@ export function useAssistant(): UseAssistantResult {
   const [language, setLanguage] = useState<SupportedLanguage>('en');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isOffline, setIsOffline] = useState(() => !navigator.onLine);
+  const [lastKnownTime, setLastKnownTime] = useState<string | null>(() => {
+    return localStorage.getItem('arenaflow_venue_data_time') || null;
+  });
+
+  // Track online/offline status
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Fetch venue data on mount to cache it for offline fallback
+  useEffect(() => {
+    if (!isOffline) {
+      fetchVenueData()
+        .then((res) => {
+          saveVenueData(res.venue);
+          const nowStr = new Date().toLocaleTimeString();
+          localStorage.setItem('arenaflow_venue_data_time', nowStr);
+          setLastKnownTime(nowStr);
+        })
+        .catch(() => {
+          // Ignore background fetch error, rely on fallback/cache
+        });
+    }
+  }, [isOffline]);
 
   const ask = useCallback(
     async (question: string): Promise<void> => {
@@ -40,22 +76,46 @@ export function useAssistant(): UseAssistantResult {
       }
       setError(null);
       setIsLoading(true);
-      setTurns((prev) => [...prev, { id: makeId(), role: 'fan', text: trimmed }]);
+      setTurns((prev) => [...prev, { id: makeId(), role: 'fan', text: trimmed, lang: language }]);
+
+      if (isOffline) {
+        await new Promise((r) => setTimeout(r, 300));
+        const offlineText = getOfflineAssistantResponse(trimmed, language);
+        setTurns((prev) => [
+          ...prev,
+          { id: makeId(), role: 'assistant', text: offlineText, lang: language },
+        ]);
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const result = await askAssistant(trimmed, language);
-        setTurns((prev) => [...prev, { id: makeId(), role: 'assistant', text: result.answer }]);
+        setTurns((prev) => [
+          ...prev,
+          { id: makeId(), role: 'assistant', text: result.answer, lang: result.language },
+        ]);
       } catch (caught) {
-        const message =
-          caught instanceof ApiError
-            ? caught.message
-            : 'The assistant is unavailable right now. Please try again.';
-        setError(message);
+        if (caught instanceof ApiError && caught.code === 'NETWORK') {
+          setIsOffline(true);
+          const offlineText = getOfflineAssistantResponse(trimmed, language);
+          setTurns((prev) => [
+            ...prev,
+            { id: makeId(), role: 'assistant', text: offlineText, lang: language },
+          ]);
+        } else {
+          const message =
+            caught instanceof ApiError
+              ? caught.message
+              : 'The assistant is unavailable right now. Please try again.';
+          setError(message);
+        }
       } finally {
         setIsLoading(false);
       }
     },
-    [language, isLoading],
+    [language, isLoading, isOffline],
   );
 
-  return { turns, language, isLoading, error, setLanguage, ask };
+  return { turns, language, isLoading, error, setLanguage, ask, isOffline, lastKnownTime };
 }

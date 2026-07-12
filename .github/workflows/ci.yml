@@ -40,3 +40,17 @@ jobs:
 
       - name: Production build
         run: npm run build
+
+      - name: Run Semgrep SAST
+        run: npx semgrep --config=auto --error
+
+      - name: Generate CycloneDX SBOM
+        run: |
+          npm install -g @cyclonedx/cyclonedx-npm
+          cyclonedx-npm --output-format JSON --output-file sbom.json
+
+      - name: Upload SBOM Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.json

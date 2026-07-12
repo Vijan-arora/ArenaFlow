@@ -75,3 +75,8 @@ export function fetchSnapshot(): Promise<OpsSnapshot> {
 export function requestBriefing(): Promise<OpsBriefing> {
   return request<OpsBriefing>('/api/operations/briefing', { method: 'POST' });
 }
+
+/** Fetches the complete venue profile. */
+export function fetchVenueData(): Promise<{ venue: any }> {
+  return request<{ venue: any }>('/api/stadium/venue');
+}

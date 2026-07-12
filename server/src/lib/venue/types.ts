@@ -3,7 +3,13 @@
 
 /** Category used to filter facilities and to tag quick actions. */
 export type FacilityCategory =
-  'food' | 'medical' | 'accessibility' | 'family' | 'prayer' | 'sustainability' | 'services';
+  | 'food'
+  | 'medical'
+  | 'accessibility'
+  | 'family'
+  | 'prayer'
+  | 'sustainability'
+  | 'services';
 
 /** A named entry gate with the stands it serves. */
 export interface Gate {

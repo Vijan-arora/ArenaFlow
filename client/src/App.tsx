@@ -18,6 +18,7 @@ const OperationsPage = lazy(() =>
     default: module.OperationsPage,
   })),
 );
+const AccessibilityPage = lazy(() => import('./features/accessibility/AccessibilityPage.js'));
 
 /** Root application component wiring routes, layout and error handling. */
 export function App(): React.JSX.Element {
@@ -39,6 +40,14 @@ export function App(): React.JSX.Element {
             element={
               <Suspense fallback={<LoadingState label="Loading operations…" />}>
                 <OperationsPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="accessibility"
+            element={
+              <Suspense fallback={<LoadingState label="Loading accessibility statement…" />}>
+                <AccessibilityPage />
               </Suspense>
             }
           />

@@ -1,8 +1,5 @@
-// Guest-facing facilities at Estadio Azteca: food, medical, accessibility,
-// family, prayer, sustainability and services.
 import type { Facility } from '../types.js';
 
-/** Every guest facility used to ground assistant answers and quick actions. */
 export const FACILITIES: Facility[] = [
   {
     id: 'food-north',

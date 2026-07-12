@@ -87,6 +87,19 @@ export function buildApp(): express.Express {
     res.json({ status: 'ok', version: APP_VERSION });
   });
 
+  // RFC 9116 security contact information
+  app.get('/.well-known/security.txt', (_req, res) => {
+    res.type('text/plain');
+    res.send(
+      [
+        'Contact: mailto:usy.joseph@gmail.com',
+        'Expires: 2027-12-31T23:59:59Z',
+        'Preferred-Languages: en',
+        'Policy: https://github.com/Vijan-arora/ArenaFlow/blob/main/SECURITY.md',
+      ].join('\n') + '\n',
+    );
+  });
+
   app.use('/api', apiLimiter);
   app.use('/api/stadium', stadiumRoutes);
   app.use('/api/assistant', assistantRoutes);

@@ -1,7 +1,5 @@
-// Ways to reach and leave Estadio Azteca on matchday.
 import type { TransitRoute } from '../types.js';
 
-/** Every transport option, including accessibility notes, for the assistant. */
 export const TRANSIT: TransitRoute[] = [
   {
     id: 'metro',

@@ -1,7 +1,5 @@
-// Entry gates at Estadio Azteca and the stands each one serves.
 import type { Gate } from '../types.js';
 
-/** Every entry gate, with the sections it serves and step-free availability. */
 export const GATES: Gate[] = [
   {
     id: 'gate-1',

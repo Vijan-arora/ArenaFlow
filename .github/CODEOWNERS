@@ -1,0 +1,13 @@
+# CODEOWNERS file for ArenaFlow
+# Defines users or teams that are responsible for code in the repository.
+
+# By default, assign everything to the team
+*       @Vijan-arora
+
+# Assign specific folders
+/client/        @Vijan-arora
+/server/        @Vijan-arora
+/docs/          @Vijan-arora
+/e2e/           @Vijan-arora
+/scripts/       @Vijan-arora
+.github/        @Vijan-arora

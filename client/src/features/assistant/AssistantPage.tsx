@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { ErrorMessage, LoadingState } from '../../components/StatusMessage.js';
+import { OfflineBanner } from '../../components/OfflineBanner.js';
 import { ChatMessageList } from './ChatMessageList.js';
 import { LanguageSelector } from './LanguageSelector.js';
 import { QuickActions } from './QuickActions.js';
@@ -10,7 +11,7 @@ import { useAssistant } from './useAssistant.js';
 
 /** Full fan assistant route. */
 export function AssistantPage(): React.JSX.Element {
-  const { turns, language, isLoading, error, setLanguage, ask } = useAssistant();
+  const { turns, language, isLoading, error, setLanguage, ask, isOffline, lastKnownTime } = useAssistant();
   const [draft, setDraft] = useState('');
 
   const runQuickAction = (question: string): void => {
@@ -26,6 +27,8 @@ export function AssistantPage(): React.JSX.Element {
           Estadio Azteca. Answers come from official venue data, in your language.
         </p>
       </div>
+
+      {isOffline ? <OfflineBanner lastKnownTime={lastKnownTime} /> : null}
 
       <div className="card stack">
         <LanguageSelector value={language} onChange={setLanguage} disabled={isLoading} />

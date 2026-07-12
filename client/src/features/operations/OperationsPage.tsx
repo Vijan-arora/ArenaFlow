@@ -1,6 +1,7 @@
 // Operations Command Center page: live crowd density, incidents,
 // sustainability metrics and an on-demand AI briefing.
 import { ErrorMessage, LoadingState } from '../../components/StatusMessage.js';
+import { OfflineBanner } from '../../components/OfflineBanner.js';
 import { BriefingPanel } from './BriefingPanel.js';
 import { DensityBoard } from './DensityBoard.js';
 import { IncidentList } from './IncidentList.js';
@@ -9,8 +10,16 @@ import { useOperations } from './useOperations.js';
 
 /** Full operations command center route. */
 export function OperationsPage(): React.JSX.Element {
-  const { snapshot, snapshotError, briefing, isBriefingLoading, briefingError, generateBriefing } =
-    useOperations();
+  const {
+    snapshot,
+    snapshotError,
+    briefing,
+    isBriefingLoading,
+    briefingError,
+    generateBriefing,
+    isOffline,
+    lastKnownTime,
+  } = useOperations();
 
   return (
     <section aria-labelledby="operations-heading" className="stack">
@@ -21,6 +30,8 @@ export function OperationsPage(): React.JSX.Element {
           sustainability performance, refreshed automatically.
         </p>
       </div>
+
+      {isOffline ? <OfflineBanner lastKnownTime={lastKnownTime} /> : null}
 
       {snapshotError !== null ? <ErrorMessage message={snapshotError} /> : null}
       {snapshot === null && snapshotError === null ? (

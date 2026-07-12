@@ -33,6 +33,16 @@ export function AppLayout(): React.JSX.Element {
       <main id="main-content" className="main" tabIndex={-1}>
         <Outlet />
       </main>
+      <footer className="app-footer" style={{ borderTop: '1px solid var(--color-border)', marginTop: 'var(--space-4)', padding: 'var(--space-2) 0' }}>
+        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-1)' }}>
+          <p className="muted" style={{ margin: 0, fontSize: '0.875rem' }}>
+            &copy; {new Date().getFullYear()} ArenaFlow. All rights reserved.
+          </p>
+          <NavLink to="/accessibility" style={{ fontSize: '0.875rem', color: 'var(--color-accent)', textDecoration: 'none' }}>
+            Accessibility Statement
+          </NavLink>
+        </div>
+      </footer>
     </>
   );
 }

@@ -47,6 +47,23 @@ describe('App routing', () => {
     ).toBeInTheDocument();
   });
 
+  it('lazy-loads the operations route on navigation', async () => {
+    vi.spyOn(api, 'fetchSnapshot').mockResolvedValue({
+      zones: [],
+      incidents: [],
+      sustainability: { wasteDivertedPct: 1, energyKwh: 2, waterRefillCount: 3, co2SavedKg: 4 },
+      generatedAt: '2026-07-12',
+    });
+    const user = userEvent.setup();
+    renderAt('/');
+
+    await user.click(screen.getByRole('link', { name: 'Operations' }));
+
+    expect(
+      await screen.findByRole('heading', { name: 'Operations Command Center' }),
+    ).toBeInTheDocument();
+  });
+
   it('falls back to the home page for an unknown route', () => {
     renderAt('/nowhere');
     expect(

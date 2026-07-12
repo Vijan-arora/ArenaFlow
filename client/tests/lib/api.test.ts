@@ -66,4 +66,35 @@ describe('operations API calls', () => {
     const briefing = await requestBriefing();
     expect(briefing.briefing).toBe('TOP RISKS');
   });
+
+  it('maps a non-conforming error response to UNKNOWN error code', async () => {
+    mockFetch({
+      ok: false,
+      json: () => Promise.resolve({ notAnErrorKey: {} }),
+    });
+    const error = await askAssistant('x', 'en').catch((caught: unknown) => caught);
+    expect(error).toBeInstanceOf(ApiError);
+    expect((error as ApiError).code).toBe('UNKNOWN');
+    expect((error as ApiError).message).toContain('service is temporarily unavailable');
+  });
+
+  it('maps a null error response to UNKNOWN error code', async () => {
+    mockFetch({
+      ok: false,
+      json: () => Promise.resolve(null),
+    });
+    const error = await askAssistant('x', 'en').catch((caught: unknown) => caught);
+    expect(error).toBeInstanceOf(ApiError);
+    expect((error as ApiError).code).toBe('UNKNOWN');
+  });
+
+  it('maps an error response with non-object error to UNKNOWN', async () => {
+    mockFetch({
+      ok: false,
+      json: () => Promise.resolve({ error: 'not-an-object' }),
+    });
+    const error = await askAssistant('x', 'en').catch((caught: unknown) => caught);
+    expect(error).toBeInstanceOf(ApiError);
+    expect((error as ApiError).code).toBe('UNKNOWN');
+  });
 });

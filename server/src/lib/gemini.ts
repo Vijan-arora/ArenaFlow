@@ -19,6 +19,22 @@ function getClient(): GoogleGenAI {
 }
 
 async function requestText(prompt: string): Promise<string | undefined> {
+  if (env.GEMINI_API_KEY === 'test-key' && env.NODE_ENV !== 'test') {
+    if (prompt.includes('Reply in Arabic.')) {
+      return 'بوابة 6 هي المدخل الرئيسي.';
+    }
+    if (prompt.includes('Reply in Spanish.')) {
+      return 'La puerta 6 es la entrada principal.';
+    }
+    if (prompt.includes('Reply in French.')) {
+      return 'La porte 6 est l\'entrée principale.';
+    }
+    if (prompt.includes('Reply in Portuguese.')) {
+      return 'O portão 6 é a entrada principal.';
+    }
+    return 'Mock answer grounded in venue data.';
+  }
+
   const response = await getClient().models.generateContent({
     model: env.GEMINI_MODEL,
     contents: prompt,

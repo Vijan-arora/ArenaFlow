@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-
 import { nextOccupancy, toZoneOccupancy } from '../../../src/features/operations/crowd.js';
 
 describe('toZoneOccupancy', () => {
@@ -32,8 +31,14 @@ describe('nextOccupancy', () => {
     expect(nextOccupancy(empty, () => 0)).toBeGreaterThanOrEqual(1500);
   });
 
-  it('moves occupancy by at most the configured step', () => {
-    const next = nextOccupancy(zone, () => 1);
-    expect(Math.abs(next - zone.occupancy)).toBeLessThanOrEqual(600);
+  it('moves occupancy by exactly the configured step based on random feedback', () => {
+    // random() = 1 => stepPct = (1 * 2 - 1) * 6 = 6. proposed = 5000 + 6% of 10000 = 5600
+    expect(nextOccupancy(zone, () => 1)).toBe(5600);
+    
+    // random() = 0 => stepPct = (0 * 2 - 1) * 6 = -6. proposed = 5000 - 6% of 10000 = 4400
+    expect(nextOccupancy(zone, () => 0)).toBe(4400);
+
+    // random() = 0.5 => stepPct = (0.5 * 2 - 1) * 6 = 0. proposed = 5000 + 0 = 5000
+    expect(nextOccupancy(zone, () => 0.5)).toBe(5000);
   });
 });

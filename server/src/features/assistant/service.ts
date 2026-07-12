@@ -2,7 +2,7 @@
 import { ASSISTANT_CACHE_TTL_MS, CACHE_MAX_ENTRIES } from '../../config/constants.js';
 import { generateText } from '../../lib/gemini.js';
 import { TtlCache } from '../../lib/ttl-cache.js';
-import { buildGroundingContext } from '../stadium/service.js';
+import { buildGroundingContext } from '../../lib/venue/venue-data.js';
 import { buildAssistantPrompt } from './prompts.js';
 import type { AskRequest } from './schemas.js';
 import type { AssistantAnswer } from './types.js';

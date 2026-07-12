@@ -17,18 +17,48 @@
     "dev:client": "npm run dev -w client",
     "build": "npm run build -w client && npm run build -w server",
     "lint": "eslint . --max-warnings=0",
+    "lint:deps": "depcruise --config .dependency-cruiser.cjs server/src client/src",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspaces",
-    "test:coverage": "npm run test:coverage --workspaces"
+    "test:coverage": "npm run test:coverage --workspaces",
+    "test:e2e": "playwright test",
+    "test:e2e:live": "playwright test --config=playwright.live.config.ts",
+    "test:mutation": "npm run test:mutation -w server",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
     "@eslint/js": "^9.30.0",
+    "@playwright/test": "^1.61.1",
+    "@stryker-mutator/core": "^9.6.1",
+    "@stryker-mutator/typescript-checker": "^9.6.1",
+    "@stryker-mutator/vitest-runner": "^9.6.1",
+    "dependency-cruiser": "^18.0.0",
     "eslint": "^9.30.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
     "prettier": "^3.6.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.0"
-  }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
+  },
+  "size-limit": [
+    {
+      "path": "client/dist/assets/index-*.js",
+      "limit": "250 KB"
+    }
+  ]
 }

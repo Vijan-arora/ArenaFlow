@@ -12,7 +12,7 @@
   --color-accent-strong: #7c3aed;
   --color-on-accent: #ffffff;
   /* Status colours meet WCAG AA (>= 4.5:1) with their on-colour text. */
-  --color-comfortable: #059669;
+  --color-comfortable: #047857;
   --color-busy: #d97706;
   --color-critical: #dc2626;
   --color-focus: #38bdf8;
@@ -504,4 +504,22 @@ a {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.offline-banner {
+  background-color: rgba(245, 158, 11, 0.15);
+  border: 1px solid var(--color-busy);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-weight: 600;
+}
+.offline-banner__icon {
+  font-size: 1.2rem;
+}
+.offline-banner__text {
+  color: #f59e0b;
 }

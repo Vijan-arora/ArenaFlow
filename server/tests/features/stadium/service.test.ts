@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildGroundingContext, getFacilities } from '../../../src/features/stadium/service.js';
-import { VENUE } from '../../../src/features/stadium/venue-data.js';
+import { getFacilities } from '../../../src/features/stadium/service.js';
+import { buildGroundingContext, VENUE } from '../../../src/lib/venue/venue-data.js';
 
 describe('getFacilities', () => {
   it('returns every facility when no category is given', () => {
@@ -15,8 +15,6 @@ describe('getFacilities', () => {
   });
 
   it('returns an empty list for a category with no facilities rather than throwing', () => {
-    // Every current category has entries; this guards the filter contract
-    // itself using a category cast from the domain type.
     expect(getFacilities('food').every((facility) => facility.category === 'food')).toBe(true);
   });
 });
