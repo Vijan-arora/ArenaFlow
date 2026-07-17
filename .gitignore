@@ -6,6 +6,7 @@ dist/
 
 # Test artifacts
 coverage/
+server/reports/
 
 # Environment — never commit secrets
 .env
